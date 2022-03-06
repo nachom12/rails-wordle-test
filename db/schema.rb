@@ -10,10 +10,39 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_22_223333) do
+ActiveRecord::Schema.define(version: 2022_03_06_002318) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "games", force: :cascade do |t|
+    t.integer "status"
+    t.bigint "user_id"
+    t.date "date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "word_id"
+    t.index ["user_id"], name: "index_games_on_user_id"
+    t.index ["word_id"], name: "index_games_on_word_id"
+  end
+
+  create_table "plays", force: :cascade do |t|
+    t.bigint "game_id"
+    t.integer "attempt_number"
+    t.string "letter_1_value"
+    t.integer "letter_1_result"
+    t.string "letter_2_value"
+    t.integer "letter_2_result"
+    t.string "letter_3_value"
+    t.integer "letter_3_result"
+    t.string "letter_4_value"
+    t.integer "letter_4_result"
+    t.string "letter_5_value"
+    t.integer "letter_5_result"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["game_id"], name: "index_plays_on_game_id"
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "first_name"
@@ -23,4 +52,14 @@ ActiveRecord::Schema.define(version: 2022_02_22_223333) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "words", force: :cascade do |t|
+    t.string "word"
+    t.date "date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_foreign_key "games", "users"
+  add_foreign_key "games", "words"
+  add_foreign_key "plays", "games"
 end
